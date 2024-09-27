@@ -1,6 +1,6 @@
 
 import asyncio
-from random import uniform
+from random import randint, uniform
 from urllib.parse import quote, unquote
 
 import aiohttp
@@ -47,6 +47,37 @@ class ZigZagWorld:
         self.session.headers['Auth'] = query
         self.session.headers['Authorization'] = ''
         return True
+
+    async def watch_add(self, sleep_time: int):
+        await asyncio.sleep(sleep_time)
+        resp = await self.session.get("https://api.zigzagworld.online/api/rewards/ad")
+        return await resp.json()  # success, user
+
+    async def send_tap(self, taps_count: int):
+        resp = await self.session.post("https://api.zigzagworld.online/api/taps",
+                                       json={'taps': taps_count})
+
+        return await resp.json()
+
+    async def get_daily_rewards(self) -> list[dict]:
+        resp = await self.session.get("https://api.zigzagworld.online/api/rewards")
+        return await resp.json()
+
+    async def collect_daily_reward(self, reward_type: str, sleep_time: int) -> list[dict]:
+        """Коллектить можно раз в 24ч. Было бы смартово расчитывать как-то время"""
+        await asyncio.sleep(sleep_time)
+        resp = await self.session.post("https://api.zigzagworld.online/api/rewards",
+                                       json={'type': reward_type})
+        return await resp.json()  # success, user
+
+    async def get_store(self) -> list[dict]:
+        resp = await self.session.get("https://api.zigzagworld.online/api/store")
+        return await resp.json()
+
+    async def buy_store_item(self, item_id: int) -> list[dict]:
+        resp = await self.session.post("https://api.zigzagworld.online/api/store",
+                                       json={'id': item_id})
+        return await resp.json()  # success, user
 
     async def get_tg_web_data(self) -> str | None:
         try:

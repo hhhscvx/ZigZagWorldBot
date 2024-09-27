@@ -1,5 +1,4 @@
-
-from asyncio import sleep
+import asyncio
 from random import uniform
 
 from pyrogram import Client
@@ -13,7 +12,7 @@ async def start(tg_client: Client, proxy: str | None = None):
     zigzag = ZigZagWorld(tg_client=tg_client, proxy=proxy)
     session_name = tg_client.name + '.session'
 
-    await sleep(uniform(*config.DELAY_CONN_ACCOUNT))
+    await asyncio.sleep(uniform(*config.DELAY_CONN_ACCOUNT))
 
     while True:
         try:
@@ -21,4 +20,4 @@ async def start(tg_client: Client, proxy: str | None = None):
 
         except Exception as e:
             logger.error(f"{session_name} | Unknown Error: {e}")
-            await sleep(delay=3)
+            await asyncio.sleep(delay=3)
