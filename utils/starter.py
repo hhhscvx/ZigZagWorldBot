@@ -51,6 +51,26 @@ async def start(tg_client: Client, proxy: str | None = None):
                             f"{session_name} | Buy item «{item['name']}»! +{item['award']} {item['award_type']}")
                         account = item_buyed['user']
 
+                # Taps
+                account = await zigzag.get_me()
+                available_taps = account['energy_count']
+                while True:
+                    if available_taps > config.MIN_AVAILABLE_ENERGY:
+                        taps_count = randint(*config.RANDOM_TAPS_COUNT)
+                        tap = await zigzag.send_tap(taps_count=taps_count)
+                        if tap.get('success') is True:
+                            logger.success(f"{session_name} | Tapped +{taps_count}!")
+                            available_taps = tap['user']['energy_count']
+                        await asyncio.sleep(uniform(*config.SLEEP_BETWEEN_TAP))
+                    else:
+                        account = await zigzag.get_me()
+                        sleep_time = uniform(*config.SLEEP_BY_MIN_ENERGY)
+                        logger.info(
+                            f"{session_name} | Energy: {account['energy_count']}/{account['max_energy']} | Balance: {account['coins']}")
+                        logger.info(f" | Sleep {int(sleep_time)}s...")
+                        await asyncio.sleep(sleep_time)
+                        break
+
             except Exception as e:
                 logger.error(f"{session_name} | Unknown Error: {e}")
                 await asyncio.sleep(delay=3)
