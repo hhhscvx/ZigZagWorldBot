@@ -57,7 +57,7 @@ class ZigZagWorld:
         resp = await self.session.get("https://api.zigzagworld.online/api/rewards/ad")
         return await resp.json()  # success, user
 
-    async def send_tap(self, taps_count: int) -> dict:
+    async def send_tap(self, taps_count: int) -> dict:  # не обязательно умножать на taps_multiply, там все само считается
         resp = await self.session.post("https://api.zigzagworld.online/api/taps",
                                        json={'taps': taps_count})
 

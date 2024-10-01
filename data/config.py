@@ -14,6 +14,8 @@ class Settings(BaseSettings):
 
     SLEEP_WATCHING_AD: list[int] = [10, 20]
 
+    MAX_STORE_ITEM_PRICE: int = 200_000
+
     USE_PROXY_FROM_FILE: bool = False  # True - if use proxy from file, False - if use proxy from accounts.json
     PROXY_PATH: str = "data/proxy.txt"
     PROXY_TYPE_TG: str = "socks5"  # proxy type for tg client. "socks4", "socks5" and "http" are supported
