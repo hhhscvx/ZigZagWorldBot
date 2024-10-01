@@ -1,6 +1,6 @@
 
 import asyncio
-from random import randint, uniform
+from random import uniform
 from urllib.parse import quote, unquote
 
 import aiohttp
@@ -48,6 +48,10 @@ class ZigZagWorld:
         self.session.headers['Authorization'] = ''
         return True
 
+    async def get_me(self) -> dict:
+        resp = await self.session.get("https://api.zigzagworld.online/api/account/me")
+        return await resp.json()
+
     async def watch_add(self, sleep_time: int) -> dict:
         await asyncio.sleep(sleep_time)
         resp = await self.session.get("https://api.zigzagworld.online/api/rewards/ad")
@@ -63,9 +67,7 @@ class ZigZagWorld:
         resp = await self.session.get("https://api.zigzagworld.online/api/rewards")
         return await resp.json()
 
-    async def collect_daily_reward(self, reward_type: str, sleep_time: int) -> dict:
-        """Коллектить можно раз в 24ч. Было бы смартово расчитывать как-то время"""
-        await asyncio.sleep(sleep_time)
+    async def collect_daily_reward(self, reward_type: str) -> dict:  # sleep watching ad нужен будет
         resp = await self.session.post("https://api.zigzagworld.online/api/rewards",
                                        json={'type': reward_type})
         return await resp.json()  # success, user
