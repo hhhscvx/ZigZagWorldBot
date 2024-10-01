@@ -1,6 +1,6 @@
 
 import asyncio
-from random import uniform
+from random import choice, uniform
 from urllib.parse import quote, unquote
 
 import aiohttp
@@ -46,6 +46,11 @@ class ZigZagWorld:
 
         self.session.headers['Auth'] = query
         self.session.headers['Authorization'] = ''
+
+        resp = await self.session.post("https://api.zigzagworld.online/api/account/registration",
+                                       json={'planet': choice(config.ALL_PLANETS)})
+        await asyncio.sleep(1)
+
         return True
 
     async def get_me(self) -> dict:
@@ -57,7 +62,7 @@ class ZigZagWorld:
         resp = await self.session.get("https://api.zigzagworld.online/api/rewards/ad")
         return await resp.json()  # success, user
 
-    async def send_tap(self, taps_count: int) -> dict:  # не обязательно умножать на taps_multiply, там все само считается
+    async def send_tap(self, taps_count: int) -> dict:
         resp = await self.session.post("https://api.zigzagworld.online/api/taps",
                                        json={'taps': taps_count})
 
@@ -112,8 +117,6 @@ class ZigZagWorld:
             user = quote(query.split("&user=")[1].split('&auth_date=')[0])
             auth_date = query.split('&auth_date=')[1].split('&hash=')[0]
             hash_ = query.split('&hash=')[1]
-
-            print(f"query_id={query_id}&user={user}&auth_date={auth_date}&hash={hash_}")
 
             return f"query_id={query_id}&user={user}&auth_date={auth_date}&hash={hash_}"
 

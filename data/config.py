@@ -7,8 +7,13 @@ class Settings(BaseSettings):
     API_ID: int
     API_HASH: str
 
-    RANDOM_TAPS_COUNT: list[int] = [3, 10]
-    SLEEP_BETWEEN_TAP: list[float] = [0.8, 2.4]
+    ALL_PLANETS: list[str] = ['bitrix', 'fossilith', 'mineris',
+                              'cryptonix', 'hashaur', 'mesohex', 'terrablock']
+
+    COMPLETE_TASKS: bool = True  # set to False after completing all tasks by soft
+
+    RANDOM_TAPS_COUNT: list[int] = [5, 12]
+    SLEEP_BETWEEN_TAP: list[float] = [0.3, 0.8]
     MIN_AVAILABLE_ENERGY: int = 15
     SLEEP_BY_MIN_ENERGY: list[int] = [600, 1500]
 
