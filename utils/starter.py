@@ -48,9 +48,7 @@ async def start(tg_client: Client, proxy: str | None = None):
                         multiply = item['multiply_price']
                         level = ([i for i in account['store'] if i['store_id'] == item['id']])
                         level = level[0]['level'] if level else 0
-                        print('LEVEL:', level)
                         curr_price = start_price * multiply * level if level != 0 else start_price
-                        print('CURR PRICE:', curr_price)
                         if curr_price > config.MAX_STORE_ITEM_PRICE:
                             continue
                         item_buyed = await zigzag.buy_store_item(item_id=item['id'])
@@ -70,7 +68,7 @@ async def start(tg_client: Client, proxy: str | None = None):
                         tap = await zigzag.send_tap(taps_count=taps_count)
                         if tap.get('success') is True:
                             logger.success(
-                                f"{session_name} | Tapped +{taps_count} taps! Energy: {tap['user']['energy_count']}/{tap['user']['max_energy']} | Balance: {tap['user']['coins']}")
+                                f"{session_name} | Tapped +{taps_count * (account['taps_per_click'] if account['taps_per_click'] < 10 else 10)} taps! Energy: {tap['user']['energy_count']}/{tap['user']['max_energy']} | Balance: {tap['user']['coins']}")
                             available_taps = tap['user']['energy_count']
                         await asyncio.sleep(uniform(*config.SLEEP_BETWEEN_TAP))
                     else:
@@ -84,7 +82,6 @@ async def start(tg_client: Client, proxy: str | None = None):
 
             except Exception as error:
                 logger.error(f"{session_name} | Unknown Error: {error}")
-                raise error
                 await asyncio.sleep(delay=3)
     else:
         await zigzag.logout()

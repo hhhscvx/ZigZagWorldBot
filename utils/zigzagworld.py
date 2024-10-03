@@ -60,7 +60,7 @@ class ZigZagWorld:
     async def watch_add(self, sleep_time: int) -> dict:
         await asyncio.sleep(sleep_time)
         resp = await self.session.get("https://api.zigzagworld.online/api/rewards/ad")
-        return await resp.json()  # success, user
+        return await resp.json()
 
     async def send_tap(self, taps_count: int) -> dict:
         resp = await self.session.post("https://api.zigzagworld.online/api/taps",
@@ -72,10 +72,10 @@ class ZigZagWorld:
         resp = await self.session.get("https://api.zigzagworld.online/api/rewards")
         return await resp.json()
 
-    async def collect_daily_reward(self, reward_type: str) -> dict:  # sleep watching ad нужен будет
+    async def collect_daily_reward(self, reward_type: str) -> dict:
         resp = await self.session.post("https://api.zigzagworld.online/api/rewards",
                                        json={'type': reward_type})
-        return await resp.json()  # success, user
+        return await resp.json()
 
     async def get_store(self) -> list[dict]:
         resp = await self.session.get("https://api.zigzagworld.online/api/store")
@@ -84,7 +84,7 @@ class ZigZagWorld:
     async def buy_store_item(self, item_id: int) -> dict:
         resp = await self.session.post("https://api.zigzagworld.online/api/store",
                                        json={'id': item_id})
-        return await resp.json()  # success, user
+        return await resp.json()
 
     async def get_tasks(self) -> list[dict]:
         resp = await self.session.get("https://api.zigzagworld.online/api/tasks")
@@ -93,7 +93,7 @@ class ZigZagWorld:
     async def complete_task(self, task_id: int) -> dict:
         resp = await self.session.post("https://api.zigzagworld.online/api/tasks/complete",
                                        json={'id': task_id})
-        return await resp.json()  # Прост чекать что success true
+        return await resp.json()
 
     async def get_tg_web_data(self) -> str | None:
         try:
